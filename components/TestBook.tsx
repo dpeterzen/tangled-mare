@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, Typography, CircularProgress, CardMedia, Box } from "@mui/material";
+import { CardContent, Typography, CardMedia } from "@mui/material";
 
 interface Progress {
   total: number;
@@ -21,9 +21,10 @@ interface SSEData {
 
 interface TestBookProps {
   taskId: string;
+  setLoading: (loading: boolean) => void;
 }
 
-const TestBook: React.FC<TestBookProps> = ({ taskId }) => {
+const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
   const [sseData, setSSEData] = useState<SSEData | null>(null);
 
   useEffect(() => {
@@ -42,6 +43,7 @@ const TestBook: React.FC<TestBookProps> = ({ taskId }) => {
 
         // Check if status is done and close the connection
         if (parsedData.status === 'done') {
+          setLoading(false);
           eventSource.close();
         }
       } catch (error) {
@@ -60,7 +62,7 @@ const TestBook: React.FC<TestBookProps> = ({ taskId }) => {
       // It's important to close the connection when the component is unmounted
       eventSource.close();
     };
-  }, [taskId]); // Rerun effect when taskId changes
+  }, [taskId, setLoading]); // Rerun effect when taskId changes
 
   if (!sseData) {
     return <div>Loading...</div>;
@@ -75,78 +77,65 @@ const TestBook: React.FC<TestBookProps> = ({ taskId }) => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <Card sx={{ marginBottom: 2, padding: 2 }}>
-        <Typography variant="body1">Status: {sseData.status}</Typography>
-        <div className="flex items-center">
-          <Typography variant="body1">Progress: </Typography>
-          <CircularProgress
-            variant="determinate"
-            value={(sseData.progress.current / sseData.progress.total) * 100}
-            style={{ marginLeft: '8px' }}
-          />
-        </div>
-      </Card>
+
 
       {data && (
-      <>
-        <Card>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div" style={{ textAlign: 'center' }}>
-              {data.title}
-            </Typography>
-          </CardContent>
-          {[...Array(maxLength)].map((_, index) => (
-            <React.Fragment key={index}>
-              <Box my={1} display="flex" justifyContent="center">
-                <Typography variant="caption" color="text.secondary">
-                  {`Page ${index + 1}`}
-                </Typography>
-              </Box>
-              {data.text_description && data.text_description[index] && (
+        <>
+          <div className="my-1">
+            <div className="flex justify-between items-center pb-2 border-b border-gray-300">
+              <h2 className="text-xl font-bold">
+                Your Generated Storybook
+              </h2>
+            </div>
+            <div className="max-w-2xl my-4 mx-auto">
+              <div className="bg-white rounded-xl shadow-sm p-4 border">
                 <CardContent>
-                  <Typography variant="body2" color="text.secondary">
-                    {data.text_description[index]}
-                  </Typography>
+                  <h3 className="text-xl text-center font-bold">{data.title}</h3>
                 </CardContent>
-              )}
-              {data.illustrations && data.illustrations[index] && (
-                <>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={data.illustrations[index]}
-                    alt="Illustration"
-                  />
-                  {data.image_description && data.image_description[index] && (
-                    <CardContent>
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        style={{ fontSize: "0.5rem" }}
-                      >
-                        {data.image_description[index]}
-                      </Typography>
-                    </CardContent>
-                  )}
-                </>
-              )}
-            </React.Fragment>
-          ))}
-        </Card>
+                {[...Array(maxLength)].map((_, index) => (
+                  <React.Fragment key={index}>
+                    <div className="mt-2 mb-1 text-center text-sm text-gray-600">
+                      {`Page ${index + 1}`}
+                    </div>
+                    {data.text_description && data.text_description[index] && (
+                      <CardContent>
+                        <Typography variant="body1">
+                          {data.text_description[index]}
+                        </Typography>
+                      </CardContent>
+                    )}
+                    {data.illustrations && data.illustrations[index] && (
+                      <>
+                        <CardMedia
+                          component="img"
+                          height="140"
+                          image={data.illustrations[index]}
+                          alt="Illustration"
+                        />
+                        {data.image_description && data.image_description[index] && (
+                          <p className="mb-4 text-xs text-center text-gray-500">
+                            {data.image_description[index]}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  </React.Fragment>
+                ))}
 
-        {sseData.status === 'done' && (
-          <Card sx={{ marginTop: 2, paddingTop: 2 }}>
-            <CardContent>
-            <Typography gutterBottom variant="h5" component="div" style={{ textAlign: 'center' }}>
-              The End
-            </Typography>
-            </CardContent>
-          </Card>
-        )}
-      </>
-    )}
-  </div>
-);
+                {sseData.status === 'done' && (
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div" style={{ textAlign: 'center' }}>
+                      The End
+                    </Typography>
+                  </CardContent>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
 
 
 };

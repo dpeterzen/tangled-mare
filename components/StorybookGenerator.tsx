@@ -3,7 +3,8 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import TestBook from './TestBook';
 import CustomSlider from './ui/CustomSlider';
-import { TextField, Button } from '@mui/material';
+import { TextField } from '@mui/material';
+import LoadingDots from "@/components/LoadingDots";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL
 const username = process.env.NEXT_PUBLIC_API_USERNAME;
@@ -13,9 +14,11 @@ const StorybookGenerator: React.FC = () => {
   const [description, setDescription] = useState<string>('');
   const [pages, setPages] = useState<number>(0);
   const [taskId, setTaskId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const headers = {
@@ -62,9 +65,10 @@ const StorybookGenerator: React.FC = () => {
             />
             <div className="my-4">
               <button
+                disabled={loading}
                 className="bg-blue-800 font-medium rounded-md w-full text-white px-4 py-2 hover:bg-blue-600 disabled:bg-blue-800"
               >
-                {`Generate new story `}
+                {loading ? <LoadingDots color="white" style="large" /> : 'Generate new story'}
               </button>
             </div>
           </form>
@@ -72,7 +76,7 @@ const StorybookGenerator: React.FC = () => {
       </div>
       {/* {taskId !== null && <FlipBook taskID={taskId} totalPages={pages} />} */}
       <div className="flex md:w-1/2 md:flex-col">
-        {taskId !== null && <TestBook taskId={taskId} />}
+        {taskId !== null && <TestBook taskId={taskId} setLoading={setLoading} />}
       </div>
     </>
   );
