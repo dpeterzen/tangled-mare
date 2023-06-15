@@ -12,9 +12,10 @@ const password = process.env.NEXT_PUBLIC_API_PASSWORD;
 
 const StorybookGenerator: React.FC = () => {
   const [description, setDescription] = useState<string>('');
-  const [pages, setPages] = useState<number>(0);
+  const [pages, setPages] = useState<number>(1);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isTextFieldEmpty, setIsTextFieldEmpty] = useState<boolean>(true);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -45,7 +46,10 @@ const StorybookGenerator: React.FC = () => {
             <TextField
               type="text"
               value={description}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setDescription(e.target.value);
+                setIsTextFieldEmpty(e.target.value.trim() === '');
+              }}
               id="outlined-multiline-static"
               label="Sentence/topic to use..."
               inputProps={{ maxLength: 2000 }} // Set the maxLength attribute
@@ -65,7 +69,7 @@ const StorybookGenerator: React.FC = () => {
             />
             <div className="my-4">
               <button
-                disabled={loading}
+                disabled={loading || isTextFieldEmpty}
                 className="bg-blue-800 font-medium rounded-md w-full text-white px-4 py-2 hover:bg-blue-600 disabled:bg-blue-800"
               >
                 {loading ? <LoadingDots color="white" style="large" /> : 'Generate new story'}
