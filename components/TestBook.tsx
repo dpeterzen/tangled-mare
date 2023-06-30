@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CardContent, Typography, CardMedia } from "@mui/material";
+import Placeholder from '@mui/material/Skeleton';
 
 interface Progress {
   total: number;
@@ -26,22 +27,25 @@ interface TestBookProps {
 
 const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
   const [sseData, setSSEData] = useState<SSEData | null>(null);
+  const [isImageLoaded, setImageLoaded] = useState<boolean[]>([]); 
 
   useEffect(() => {
+
+    // Reset the isImageLoaded state when opening a new SSE connection
+    setImageLoaded([]);
+    
     const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_API_URL}get_updates/${taskId}`);
 
     eventSource.onmessage = (event) => {
       if (event.data.startsWith(':')) {
-        // Ignore keep-alive messages
         return;
       }
 
       try {
         const parsedData: SSEData = JSON.parse(event.data);
-        console.log(parsedData); // log the parsed data
+        console.log(parsedData);
         setSSEData(parsedData);
 
-        // Check if status is done and close the connection
         if (parsedData.status === 'done') {
           setLoading(false);
           eventSource.close();
@@ -52,17 +56,14 @@ const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
     };
 
     eventSource.onerror = (error) => {
-      // Handle the error here, you may want to add some retry logic
       console.error("SSE error:", error);
-      // Close the connection in case of error
       eventSource.close();
     };
 
     return () => {
-      // It's important to close the connection when the component is unmounted
       eventSource.close();
     };
-  }, [taskId, setLoading]); // Rerun effect when taskId changes
+  }, [taskId, setLoading]); 
 
   if (!sseData) {
     return <div>Loading...</div>;
@@ -77,8 +78,6 @@ const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-
-
       {data && (
         <>
           <div className="my-1">
@@ -104,24 +103,43 @@ const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
                         </Typography>
                       </CardContent>
                     )}
-                    {data.illustrations && data.illustrations[index] && (
-                      <>
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={data.illustrations[index]}
-                          alt="Illustration"
-                        />
-                        {data.image_description && data.image_description[index] && (
-                          <p className="mb-4 text-xs text-center text-gray-500">
-                            {data.image_description[index]}
-                          </p>
+                    {data.image_description && data.image_description[index] && (
+                      <div style={{ position: 'relative', width: '100%', paddingTop: '100%' }}>
+                        {!isImageLoaded[index] && (
+                          <>
+                            <Placeholder variant="rectangular" width="100%" height="100%" animation="wave" />
+                            <p className="mb-4 text-xs text-center text-gray-500" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                              {data.image_description[index]}
+                            </p>
+                          </>
                         )}
-                      </>
+                        {data.illustrations && data.illustrations[index] && (
+                          <CardMedia
+                            component="img"
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              width: '100%',
+                              height: '100%'
+                            }}
+                            image={data.illustrations[index]}
+                            alt={data.image_description[index]}
+                            title={data.image_description[index]}
+                            onLoad={() => {
+                              setImageLoaded(prevState => {
+                                const newState = [...prevState];
+                                newState[index] = true;
+                                return newState;
+                              });
+                            }}
+                          />
+                        )}
+                      </div>
                     )}
                   </React.Fragment>
                 ))}
-
+                
                 {sseData.status === 'done' && (
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div" style={{ textAlign: 'center' }}>
@@ -136,8 +154,6 @@ const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
       )}
     </div>
   );
-
-
 };
 
 export default TestBook;
