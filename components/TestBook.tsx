@@ -131,7 +131,7 @@ const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
                         {!isImageLoaded[index] && (
                           <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                             <Placeholder variant="rectangular" width="100%" height="100%" animation="wave" />
-                            <p className="mb-4 text-xs text-center text-gray-500" style={{ position: 'absolute' }}>
+                            <p className="mx-20 text-xs text-center text-gray-500" style={{ position: 'absolute' }}>
                               {data.image_description[index]}
                             </p>
                           </div>
