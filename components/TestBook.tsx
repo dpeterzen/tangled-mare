@@ -105,14 +105,6 @@ const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
                     )}
                     {data.image_description && data.image_description[index] && (
                       <div style={{ position: 'relative', width: '100%', paddingTop: '100%' }}>
-                        {!isImageLoaded[index] && (
-                          <>
-                            <Placeholder variant="rectangular" width="100%" height="100%" animation="wave" />
-                            <p className="mb-4 text-xs text-center text-gray-500" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-                              {data.image_description[index]}
-                            </p>
-                          </>
-                        )}
                         {data.illustrations && data.illustrations[index] && (
                           <CardMedia
                             component="img"
@@ -121,7 +113,8 @@ const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
                               top: 0,
                               left: 0,
                               width: '100%',
-                              height: '100%'
+                              height: '100%',
+                              display: isImageLoaded[index] ? 'block' : 'none'
                             }}
                             image={data.illustrations[index]}
                             alt={data.image_description[index]}
@@ -134,6 +127,14 @@ const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
                               });
                             }}
                           />
+                        )}
+                        {!isImageLoaded[index] && (
+                          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                            <Placeholder variant="rectangular" width="100%" height="100%" animation="wave" />
+                            <p className="mb-4 text-xs text-center text-gray-500" style={{ position: 'absolute' }}>
+                              {data.image_description[index]}
+                            </p>
+                          </div>
                         )}
                       </div>
                     )}
