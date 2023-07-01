@@ -52,8 +52,8 @@ const CustomSlider: React.FC<SliderProps> = (props) => {
       <IOSSlider
         aria-label="ios slider"
         valueLabelDisplay="on"
-        max={20}
-        min={1}
+        max={15}
+        min={2}
         {...props}
       />
     </Box>

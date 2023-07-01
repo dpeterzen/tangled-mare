@@ -12,7 +12,7 @@ const password = process.env.NEXT_PUBLIC_API_PASSWORD;
 
 const StorybookGenerator: React.FC = () => {
   const [description, setDescription] = useState<string>('');
-  const [pages, setPages] = useState<number>(1);
+  const [pages, setPages] = useState<number>(5);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [isTextFieldEmpty, setIsTextFieldEmpty] = useState<boolean>(true);
@@ -61,7 +61,7 @@ const StorybookGenerator: React.FC = () => {
               }}
               placeholder="Set in the cowboy bebop universe, write a story about Benny, the bandit who travels to Mars in search of secret treasure"
             />
-            <p className="my-6 pb-1 font-light text-sm">Number of pages...</p>
+            <p className="my-6 pb-2 font-light text-sm">Number of pages...</p>
             <CustomSlider
               aria-label="Pages"
               value={pages}
