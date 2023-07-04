@@ -10,7 +10,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL
 const username = process.env.NEXT_PUBLIC_API_USERNAME;
 const password = process.env.NEXT_PUBLIC_API_PASSWORD;
 
-const StorybookGenerator: React.FC = () => {
+const PicturebookGenerator: React.FC = () => {
   const [description, setDescription] = useState<string>('');
   const [pages, setPages] = useState<number>(5);
   const [taskId, setTaskId] = useState<string | null>(null);
@@ -86,4 +86,4 @@ const StorybookGenerator: React.FC = () => {
   );
 };
 
-export default StorybookGenerator;
+export default PicturebookGenerator;

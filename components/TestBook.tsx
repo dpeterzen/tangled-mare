@@ -83,7 +83,7 @@ const TestBook: React.FC<TestBookProps> = ({ taskId, setLoading }) => {
           <div className="my-1">
             <div className="flex justify-between items-center pb-2 border-b border-gray-300">
               <h2 className="text-xl font-bold">
-                Your Generated Storybook
+                Your Generated Picturebook
               </h2>
             </div>
             <div className="max-w-2xl my-4 mx-auto">

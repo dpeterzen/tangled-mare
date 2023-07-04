@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Footer from "@/components/Footer";
-import StorybookGenerator from "@/components/StorybookGenerator"
+import PicturebookGenerator from "@/components/PicturebookGenerator"
 
 export default function Home() {
 
@@ -8,7 +8,7 @@ export default function Home() {
     <>
       <Head>
 
-        <title>Storybook Generator</title>
+        <title>Picturebook Generator</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -16,7 +16,7 @@ export default function Home() {
         <link rel="manifest" href="/site.webmanifest" />
         <meta
           name="description"
-          content="Generate a storybook with AI."
+          content="Generate a picturebook with AI."
         />
         <meta
           property="og:site_name"
@@ -24,11 +24,11 @@ export default function Home() {
         />
         <meta
           property="og:description"
-          content="Enter a sentence/topic and page number and use AI to create a storybook."
+          content="Enter a sentence/topic and page number and use AI to create a picturebook."
         />
         <meta
           property="og:title"
-          content="Storybook Generator with AI"
+          content="Picturebook Generator with AI"
         />
       </Head>
 
@@ -64,13 +64,13 @@ export default function Home() {
             <div className="max-w-5xl mx-auto">
               <div className="w-full mx-auto">
                 <h1 className="text-6xl text-center font-bold pb-1 text-slate-900">
-                  Storybook Generator  🔮
+                  Picturebook Generator  🔮
                 </h1>
                 <p className="mt-3 mb-10 text-center">
-                  Generate a storybook with AI. <br />
+                  Generate a unique picturebook with AI. <br />
                 </p>
                 <div className="flex flex-col md:flex-row w-full md:space-x-20">
-                  <StorybookGenerator />
+                  <PicturebookGenerator />
                 </div>
               </div>
             </div>
