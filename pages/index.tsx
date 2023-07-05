@@ -43,15 +43,15 @@ export default function Home() {
                     rel="noreferrer"
                     className="text-white flex max-w-fit items-center justify-center space-x-2 text-xl"
                   >
-                    <p>👨‍🌾</p>
+                    <p>👨‍🎨</p>
 
                   </a>
                   <a target="_blank"
-                    href="#"
+                    href="https://www.linkedin.com/in/hymanrobert/"
                     rel="noreferrer"
                     className="text-white flex max-w-fit items-center justify-center space-x-2 text-xl"
                   >
-                    <p>👨‍🏭</p>
+                    <p>👨‍🔧</p>
 
                   </a>
                 </div>
